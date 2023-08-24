@@ -1,0 +1,25 @@
+name: Deploy site to FTP
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@master
+    - name: 🚚 Init Astro
+      run: npm install
+    - name: Run Build
+      run: npm run build
+    - name: Deploy App Files
+      uses: isthatcentered/dist-to-ftp@master
+      with:
+        user: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        host: ${{ secrets.FTP_SERVER }}
+        path: dist
+        into: ./
+        cleanupExisting: true
